@@ -60,6 +60,8 @@ void draw()
         currentID =  allFriends.get(friendItterator).get("id").stringValue();
         myClient.GET("me/mutualfriends/" + currentID, params);
         friendItterator++;
+        readyForNextMutual = false;
+        println("itt: " + friendItterator);
       }
       else 
       {
@@ -115,7 +117,7 @@ void responseReceived(HttpRequest request, HttpResponse response) {
       findingMutuals = true;
       readyForNextMutual = true;
     }
-    else if(results.get("data").size() > 0 && findingMutuals == true)
+    else if(findingMutuals == true)
     {
       JSONObject mutualConnections = results.get("data");
       
@@ -130,12 +132,13 @@ void responseReceived(HttpRequest request, HttpResponse response) {
           continue;
         }
         
-        print(node1.name + " : ");
-        println(node2.name);
+        println(node2.name + " : " + node1.name);
         
-        stroke(100, 100, 200, 10);
+        stroke(100, 100, 200, 20);
         line(node1.x, node1.y, node2.x, node2.y);
+        
       }
+      readyForNextMutual = true;
     }
   } else {
     // output the entire response as a string
