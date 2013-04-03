@@ -26,7 +26,7 @@ void setup()
   myClient.useSSL = true;
   http = new HTTP();
   
-  size(700,700);
+  size(1200,700);
   background(50,50,100);
   nodes = new HashMap();
   //randomDist();
@@ -104,7 +104,7 @@ void responseReceived(HttpRequest request, HttpResponse response) {
         // get the displayName element in the array and return as a String
         String id = allFriends.get(i).get("id").stringValue();
         String friendName = allFriends.get(i).get("name").stringValue();
-        nodes.put(id, new Node(random(700), random(700), friendName));
+        nodes.put(id, new Node(random(1200), random(700), friendName));
         // print out the name
         //println("Name " + i + ": " + friendName + " ID: " + id);
       }

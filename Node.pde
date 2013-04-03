@@ -20,12 +20,12 @@ class Node
   
   void draw()
   {
-    fill(100, 100, 200, 50);
-    textSize(10);
-    text(name, x, y); 
     noFill();
     stroke(60,60,100);
     ellipseMode(CENTER);
     ellipse(x,y,10,10);
+    fill(200, 100, 100, 50);
+    textSize(10);
+    text(name, x, y); 
   }
 }
