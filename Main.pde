@@ -181,7 +181,7 @@ void draw()
   
   nodeArray = nodes.values().toArray();
   
-  stroke(100, 100, 200, 20);
+  stroke(100, 100, 200, 5);
   for(int i=0;i<nodes.size();i++)
   {
     Node node = (Node)nodeArray[i];
@@ -251,29 +251,23 @@ void replotPoints(Node node, float temp)
       }
     }
     
-    if(mututalNode == true)
+    if(mututalNode == true && sqrt(pow(xDist,2)+ pow(yDist,2)) > 50)
     {
-      if(sqrt(pow(xDist,2)+ pow(yDist,2)) > 100)
-      {
         xTotal += xDist;
         yTotal += yDist;
         avCount++;
-      }
-      else
-      {
-        xTotal -= xDist;
-        yTotal -= yDist;
-        avCount++;
-      }
     }
-    else 
+    else if(mututalNode == true && sqrt(pow(xDist,2)+ pow(yDist,2)) <= 40)
     {
-      if(sqrt(pow(xDist,2)+ pow(yDist,2)) < 100)
-      {
         xTotal -= xDist;
         yTotal -= yDist;
         avCount++;
-      }
+    }
+    else if(mututalNode == false && sqrt(pow(xDist,2)+ pow(yDist,2)) < 75)
+    {
+        xTotal -= xDist;
+        yTotal -= yDist;
+        avCount++;
     } 
   }
   
@@ -294,8 +288,8 @@ void replotPoints(Node node, float temp)
     xComp = xAverage / sqrt(pow(xAverage,2)+ pow(yAverage,2));
     yComp = yAverage / sqrt(pow(xAverage,2)+ pow(yAverage,2));
     
-    node.x += xComp * (10 * temp);
-    node.y += yComp * (10 * temp);
+    node.x += xComp * (40 * temp);
+    node.y += yComp * (40 * temp);
   }
   else
   {

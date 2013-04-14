@@ -26,11 +26,19 @@ class Node
   void draw()
   {
     noFill();
-    stroke(60,60,100);
+    stroke(80,80,120);
     ellipseMode(CENTER);
     ellipse(x,y,10,10);
     fill(200, 100, 100, 50);
-    textSize(10);
+    textSize(7);
     text(name, x, y); 
+    
+    if(this.x < 0) this.x = 10;
+    else if(this.x > 1200) this.x = 1990;
+    
+    if(this.y < 0) this.y = 10;
+    else if(this.y > 700) this.y = 690;
+    
+    
   }
 }
