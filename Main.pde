@@ -259,14 +259,14 @@ void replotPoints(Node node, float temp)
     }
     else if(mututalNode == true && sqrt(pow(xDist,2)+ pow(yDist,2)) <= 40)
     {
-        xTotal -= xDist;
-        yTotal -= yDist;
+        xTotal -= xDist*5;
+        yTotal -= yDist*5;
         avCount++;
     }
     else if(mututalNode == false && sqrt(pow(xDist,2)+ pow(yDist,2)) < 75)
     {
-        xTotal -= xDist;
-        yTotal -= yDist;
+        xTotal -= xDist*2;
+        yTotal -= yDist*2;
         avCount++;
     } 
   }
@@ -288,8 +288,8 @@ void replotPoints(Node node, float temp)
     xComp = xAverage / sqrt(pow(xAverage,2)+ pow(yAverage,2));
     yComp = yAverage / sqrt(pow(xAverage,2)+ pow(yAverage,2));
     
-    node.x += xComp * (40 * temp);
-    node.y += yComp * (40 * temp);
+    node.x += xComp * (60 * temp);
+    node.y += yComp * (60 * temp);
   }
   else
   {
