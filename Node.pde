@@ -1,7 +1,7 @@
 class Node
 {
-  public int x = 0;
-  public int y = 0;
+  public float x = 0;
+  public float y = 0;
   public String id = "";
   public String name;
   public HashMap nodeConnections;
@@ -32,13 +32,13 @@ class Node
     else if(this.y > 700) this.y = 690;
     
     
-    noFill();
-    stroke(80,80,120);
+    fill(200,200,256);
+    stroke(120,120,200);
     ellipseMode(CENTER);
-    ellipse(x,y,10,10);
-    fill(200, 100, 100, 50);
+    ellipse(x,y,2,2);
+    fill(220, 80, 80, 256);
     textSize(7);
-    text(name, x, y); 
+    text(name, x+3, y+2); 
     
     
     

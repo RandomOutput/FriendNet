@@ -21,7 +21,8 @@ JSONObject allFriends;
 //for queing mutual friend requests
 Boolean findingMutuals = false;
 Boolean readyForNextMutual = false;
-Boolean replotPoints = false;
+Boolean replotPointsPass1 = false;
+Boolean replotPointsPass2 = false;
 Boolean drawConnections = false;
 int friendItterator = 0;
 String currentID = "";
@@ -30,6 +31,7 @@ PrintWriter friendsOutput;
 PrintWriter connectionsOutput;
 
 int plotSteps = 0;
+int plotSteps2 = 0;
 
 //FOR STUFF
 Object[] nodeArray;
@@ -41,7 +43,7 @@ void setup()
   http = new HTTP();
   
   size(1200,700);
-  background(50,50,100);
+  background(20,20,70);
   nodes = new HashMap();
   
   if(STORE_MODE) friendsOutput = createWriter("data/friends.txt");
@@ -89,7 +91,7 @@ void readCache()
     String id = _allFriends.getJSON(i).getString("id");
     String friendName = _allFriends.getJSON(i).getString("name");
     
-    nodes.put(id, new Node(random(1200), random(700), friendName, id));
+    nodes.put(id, new Node(100 + (10 * (i % 100)), 100 + (150 * int(i / 100)), friendName, id));
     //println("Name " + i + ": " + friendName + " ID: " + id);
   }
   
@@ -132,7 +134,8 @@ void readCache()
       }
     }
   }
-  replotPoints = true;
+  
+  replotPointsPass1 = true;
   
 }
 
@@ -151,13 +154,13 @@ void callForNextMutual()
   else 
   {
     findingMutuals = false;
-    replotPoints = true;
+    replotPointsPass1 = true;
   }
 }
 
 void draw()
 {
-  background(50,50,100);
+  background(30,30,60);
   
   if(CACHE_MODE) //Pull data from local cache
   {
@@ -181,23 +184,36 @@ void draw()
   
   nodeArray = nodes.values().toArray();
   
-  stroke(100, 100, 200, 5);
+  
   for(int i=0;i<nodes.size();i++)
   {
     Node node = (Node)nodeArray[i];
     
-    if(replotPoints == true)
+    if(replotPointsPass1 == true)
     {
       if(plotSteps < 53000)
       {
         plotSteps++;
         //println(i);
-        replotPoints(node, ((53000.0 - plotSteps) / 53000.0));
+        replotPointsPass1(node, ((53000.0 - plotSteps) / 53000.0));
         //println(plotSteps);
       }
       else
       {
-        replotPoints = false;
+        replotPointsPass1 = false;
+        replotPointsPass2 = true;
+      }
+    }
+    else if(replotPointsPass2 == true)
+    {
+      if(plotSteps2 < 2000)
+      {
+        plotSteps2++;
+        replotPointsPass2(node, ((2000.0 - plotSteps) / 2000.0));
+      }
+      else
+      {
+        replotPointsPass2 = false;
         drawConnections = true;
       }
     }
@@ -208,6 +224,8 @@ void draw()
       for(int j=0;j<nodeConn.length;j++)
       {
         Node node2 = (Node)nodeConn[j];
+        
+        stroke(100, 100, 256, 10);
         line(node.x, node.y, node2.x, node2.y);
       }
     }
@@ -219,8 +237,56 @@ void draw()
   ellipse(0,0,10,10);
 }
 
+void replotPointsPass2(Node node, float temp)
+{
+  float xAverage = 0;
+  float yAverage = 0;
+  float xTotal = 0;
+  float yTotal = 0;
+  float xComp = 0;
+  float yComp = 0;
+  float avCount = 0.0;
+  
+  for(int j=0;j<nodes.size();j++)
+  {
+    Node node2 = (Node)nodeArray[j];
+    
+    float xDist = node2.x - node.x;
+    float yDist = node2.y - node.y;
+    float dist = sqrt(pow(xDist,2)+ pow(yDist,2));
+    
+    if(dist < 3)
+    {
+      xTotal -= xDist;
+      yTotal -= yDist;
+      avCount++;
+    }
+  }
+  
+  if(avCount != 0)
+  {
+    xAverage = xTotal / avCount;
+    yAverage = yTotal / avCount;
+  }
+  else
+  {
+    return;
+  }
+  
+  if(sqrt(pow(xAverage,2) + pow(yAverage,2)) != 0)
+  {
+    //xComp = xAverage / 10;
+    //yComp = yAverage / 10;
+    xComp = xAverage / sqrt(pow(xAverage,2)+ pow(yAverage,2));
+    yComp = yAverage / sqrt(pow(xAverage,2)+ pow(yAverage,2));
+    
+    node.x += xComp * (3 * temp);
+    node.y += yComp * (3 * temp);
+  }
+}
 
-void replotPoints(Node node, float temp)
+
+void replotPointsPass1(Node node, float temp)
 {
   float xAverage = 0;
   float yAverage = 0;
